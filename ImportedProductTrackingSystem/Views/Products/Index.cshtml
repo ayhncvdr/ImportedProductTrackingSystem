@@ -27,7 +27,7 @@
                 @Html.DisplayNameFor(model => model.CustomOffice)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.InvoiceDate.Date)
+               Invoice @Html.DisplayNameFor(model => model.InvoiceDate.Date)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.GoodsValue)
@@ -70,7 +70,7 @@
                 @Html.DisplayFor(modelItem => item.CustomOffice)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.InvoiceDate.Date)
+                @Html.DisplayFor(modelItem => item.InvoiceDate.Day) / @Html.DisplayFor(modelItem => item.InvoiceDate.Month)/ @Html.DisplayFor(modelItem => item.InvoiceDate.Year)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.GoodsValue)

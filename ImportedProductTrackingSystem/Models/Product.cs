@@ -29,7 +29,7 @@ namespace ImportedProductTrackingSystem.Models
         [Display(Name = "Custom Office") ]
         public string CustomOffice { get; set; }
 
-        [DisplayFormat(DataFormatString = "{dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{dd/MM/yyyy}")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Please enter an invoice date")]
         [Display(Name="Invoice Date")]
