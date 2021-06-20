@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ImportedProductTrackingSystem.Models;
 
 namespace ImportedProductTrackingSystem.Data
 {
@@ -12,5 +13,8 @@ namespace ImportedProductTrackingSystem.Data
             : base(options)
         {
         }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<Country> Countries { get; set; }
     }
 }
