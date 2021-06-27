@@ -20,9 +20,50 @@ namespace ImportedProductTrackingSystem.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(bool orderbyPrice=false,bool orderbyCountry=false,bool orderbySupplier=false,bool orderbyName=false,bool orderbyCustomOffice=false)
         {
-            var applicationDbContext = _context.Products.Include(p => p.Country).Include(p => p.Supplier);
+            ViewBag.Price = orderbyPrice;
+            ViewBag.Country = orderbyCountry;
+            ViewBag.Supplier = orderbySupplier;
+            ViewBag.Name = orderbyName;
+            ViewBag.CustomOffice = orderbyCustomOffice;
+            var applicationDbContext = _context.Products.Include(p => p.Country).Include(p => p.Supplier).AsQueryable();
+            if (orderbyPrice==true)
+            {
+                applicationDbContext= applicationDbContext.OrderByDescending(p => p.GoodsValue);
+                
+            }
+            else if (orderbyCountry == true)
+            {
+                applicationDbContext = applicationDbContext.OrderBy(p => p.Country);
+
+            }
+            else if (orderbySupplier == true)
+            {
+                applicationDbContext = applicationDbContext.OrderBy(p => p.Supplier);
+
+            }
+            else if (orderbyName == true)
+            {
+                applicationDbContext = applicationDbContext.OrderBy(p => p.Name);
+
+            }
+            else if (orderbyCustomOffice == true)
+            {
+                applicationDbContext = applicationDbContext.OrderBy(p => p.CustomOffice);
+
+            }
+
+            else
+            {
+                applicationDbContext = applicationDbContext.OrderByDescending(p => p.InvoiceDate);
+            }
+            
+            
+               
+           // applicationDbContext = applicationDbContext.OrderByDescending(p => p.ValueAddedTaxPaidToCustoms);
+            
+
             return View(await applicationDbContext.ToListAsync());
         }
 

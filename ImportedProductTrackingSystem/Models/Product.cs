@@ -38,7 +38,7 @@ namespace ImportedProductTrackingSystem.Models
 
         [Required(ErrorMessage = "Please enter the value of the product")]
         [Display(Name = "Goods Value(TL)")]
-        public decimal GoodsValue { get; set; }
+        public float GoodsValue { get; set; }
 
 
         [Required(ErrorMessage = "Please enter a custom duty rate for the product")]
@@ -53,43 +53,43 @@ namespace ImportedProductTrackingSystem.Models
 
 
         [Display(Name = "Customs Duty Paid To Customs(TL)")]
-        public decimal CustomsDutyPaidToCustoms
+        public float CustomsDutyPaidToCustoms
         {
             get
             {
-                var customsDutyPaidToCustoms = (GoodsValue * CustomsDutyRate / 100);
+                float customsDutyPaidToCustoms = (GoodsValue * CustomsDutyRate / 100);
                 return customsDutyPaidToCustoms;
             }
         }
 
         [Display(Name = "VAT Base(TL)")]
-        public decimal VATBase
+        public float VATBase
         {
             get
             {
-                var vatBase = (GoodsValue + CustomsDutyPaidToCustoms);
+                float vatBase = (GoodsValue + CustomsDutyPaidToCustoms);
                 return vatBase;
             }
 
         }
 
         [Display(Name = "Value Added Tax Paid To Customs(TL)")]
-        public decimal ValueAddedTaxPaidToCustoms
+        public float ValueAddedTaxPaidToCustoms
         {
             get
             {
-                var valueAddedTaxPaidToCustoms = (VATBase * VATRate / 100);
+                float valueAddedTaxPaidToCustoms = (VATBase * VATRate / 100);
                 return valueAddedTaxPaidToCustoms;
             }
 
         }
 
         [Display(Name = "Total Import Value(TL)")]
-        public decimal TotalImportValue
+        public float TotalImportValue
         {
             get
             {
-                var totalImportValue = (ValueAddedTaxPaidToCustoms + VATBase);
+                float totalImportValue = (ValueAddedTaxPaidToCustoms + VATBase);
                 return totalImportValue;
             }
 

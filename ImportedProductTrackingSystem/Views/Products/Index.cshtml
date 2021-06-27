@@ -7,98 +7,128 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Add a New Product</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th >
-                
-                    @Html.DisplayNameFor(model => model.Name)
-                 
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Supplier)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Country)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CustomOffice)
-            </th>
-            <th>
-               Invoice @Html.DisplayNameFor(model => model.InvoiceDate.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GoodsValue)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CustomsDutyRate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VATRate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CustomsDutyPaidToCustoms)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VATBase)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ValueAddedTaxPaidToCustoms)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalImportValue)
-            </th>
 
-            <th style="width: 500px"></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Supplier.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Country.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CustomOffice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InvoiceDate.Day) / @Html.DisplayFor(modelItem => item.InvoiceDate.Month)/ @Html.DisplayFor(modelItem => item.InvoiceDate.Year)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GoodsValue)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CustomsDutyRate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VATRate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CustomsDutyPaidToCustoms)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VATBase)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ValueAddedTaxPaidToCustoms)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalImportValue)
-            </td>
-            <td style="width: 500px">
-                <a asp-action="Edit" asp-route-id="@item.Id" >Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id" >Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id" >Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<ul style="margin: 0 0 0 1100px">
+    <li class="nav-item dropdown" style="list-style-type: none">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >Order By</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+            <a asp-action="Index" asp-route-orderbyName="true">  Product Name</a>
+            <br />
+            <div class="dropdown-divider"></div>
+            <a asp-action="Index" asp-route-orderbySupplier="true">  Supplier</a>
+            <br />
+            <div class="dropdown-divider"></div>
+            <a asp-action="Index" asp-route-orderbyCountry="true">  Country</a>
+            <br />
+            <div class="dropdown-divider"></div>
+            <a asp-action="Index" asp-route-orderbyPrice="true">  Goods Value</a>
+            <br />
+            <div class="dropdown-divider"></div>
+            <a asp-action="Index" asp-route-orderbyCustomOffice="true">  Custom Office</a>
+
+
+        </div>
+
+    </li>
+</ul>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+
+                    @Html.DisplayNameFor(model => model.Name)
+
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Supplier)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Country)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CustomOffice)
+                </th>
+                <th>
+                    Invoice @Html.DisplayNameFor(model => model.InvoiceDate.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GoodsValue)
+
+
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CustomsDutyRate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.VATRate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CustomsDutyPaidToCustoms)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.VATBase)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ValueAddedTaxPaidToCustoms)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TotalImportValue)
+                </th>
+
+                <th style="width: 500px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Supplier.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Country.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomOffice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InvoiceDate.Day) / @Html.DisplayFor(modelItem => item.InvoiceDate.Month)/ @Html.DisplayFor(modelItem => item.InvoiceDate.Year)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GoodsValue)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomsDutyRate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VATRate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomsDutyPaidToCustoms)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VATBase)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ValueAddedTaxPaidToCustoms)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalImportValue)
+                    </td>
+                    <td style="width: 500px">
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

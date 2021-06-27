@@ -4,14 +4,16 @@ using ImportedProductTrackingSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ImportedProductTrackingSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210627115043_decimal to double")]
+    partial class decimaltodouble
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,8 +59,8 @@ namespace ImportedProductTrackingSystem.Data.Migrations
                     b.Property<int>("CustomsDutyRate")
                         .HasColumnType("int");
 
-                    b.Property<float>("GoodsValue")
-                        .HasColumnType("real");
+                    b.Property<double>("GoodsValue")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("InvoiceDate")
                         .HasColumnType("datetime2");
