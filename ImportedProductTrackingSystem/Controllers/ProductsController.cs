@@ -67,6 +67,108 @@ namespace ImportedProductTrackingSystem.Controllers
            searchViewModel.Result = await query.ToListAsync();
             return View(searchViewModel);
         }
+        public async Task<IActionResult> Index2(SearchViewModel searchViewModel, bool orderbyPrice = false, bool orderbyCountry = false, bool orderbySupplier = false, bool orderbyName = false, bool orderbyCustomOffice = false)
+        {
+
+            var query = _context.Products.Include(p => p.Country).Include(p => p.Supplier).AsQueryable();
+            if (orderbyPrice == true)
+            {
+                query = query.OrderByDescending(p => p.GoodsValue);
+
+            }
+            else if (orderbyCountry == true)
+            {
+                query = query.OrderBy(p => p.Country);
+
+            }
+            else if (orderbySupplier == true)
+            {
+                query = query.OrderBy(p => p.Supplier);
+
+            }
+            if (!searchViewModel.SupplierId.Equals(_context.Products.Include(p =>p.SupplierId)))
+            {
+                query = query.Where(p => p.SupplierId == searchViewModel.SupplierId);
+            }
+            else if (orderbyName == true)
+            {
+                query = query.OrderBy(p => p.Name);
+
+            }
+            else if (orderbyCustomOffice == true)
+            {
+                query = query.OrderByDescending(p => p.CustomOffice);
+
+            }
+
+            else if (!String.IsNullOrWhiteSpace(searchViewModel.SearchProduct))
+            {
+                query = query.Where(p => p.Name.Contains(searchViewModel.SearchProduct));
+            }
+
+            else
+            {
+                query = query.OrderByDescending(p => p.InvoiceDate);
+            }
+
+
+
+            // applicationDbContext = applicationDbContext.OrderByDescending(p => p.ValueAddedTaxPaidToCustoms);
+
+            searchViewModel.Result = await query.ToListAsync();
+            return View(searchViewModel);
+        }
+        public async Task<IActionResult> Index3(SearchViewModel searchViewModel, bool orderbyPrice = false, bool orderbyCountry = false, bool orderbySupplier = false, bool orderbyName = false, bool orderbyCustomOffice = false)
+        {
+
+            var query = _context.Products.Include(p => p.Country).Include(p => p.Supplier).AsQueryable();
+            if (orderbyPrice == true)
+            {
+                query = query.OrderByDescending(p => p.GoodsValue);
+
+            }
+            else if (orderbyCountry == true)
+            {
+                query = query.OrderBy(p => p.Country);
+
+            }
+            else if (orderbySupplier == true)
+            {
+                query = query.OrderBy(p => p.Supplier);
+
+            }
+            if (!searchViewModel.CountryId.Equals(_context.Products.Include(p => p.CountryId)))
+            {
+                query = query.Where(p => p.CountryId == searchViewModel.CountryId);
+            }
+            else if (orderbyName == true)
+            {
+                query = query.OrderBy(p => p.Name);
+
+            }
+            else if (orderbyCustomOffice == true)
+            {
+                query = query.OrderByDescending(p => p.CustomOffice);
+
+            }
+
+            else if (!String.IsNullOrWhiteSpace(searchViewModel.SearchProduct))
+            {
+                query = query.Where(p => p.Name.Contains(searchViewModel.SearchProduct));
+            }
+
+            else
+            {
+                query = query.OrderByDescending(p => p.InvoiceDate);
+            }
+
+
+
+            // applicationDbContext = applicationDbContext.OrderByDescending(p => p.ValueAddedTaxPaidToCustoms);
+
+            searchViewModel.Result = await query.ToListAsync();
+            return View(searchViewModel);
+        }
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)

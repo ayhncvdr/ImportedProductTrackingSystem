@@ -24,7 +24,7 @@ namespace ImportedProductTrackingSystem.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var query=  _dbContext.Products.Include(p => p.Country).Include(p => p.Supplier).OrderByDescending(p => p.InvoiceDate).Take(3);
+            var query=  _dbContext.Products.Include(p => p.Country).Include(p => p.Supplier).OrderByDescending(p => p.InvoiceDate).Take(5);
             List<Product> result =await query.ToListAsync();
             return View(result);
 
