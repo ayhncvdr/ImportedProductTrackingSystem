@@ -7,23 +7,29 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ImportedProductTrackingSystem.Data;
 using ImportedProductTrackingSystem.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace ImportedProductTrackingSystem.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IpmsUser> _userManager;
 
-        public ProductsController(ApplicationDbContext context)
+        public ProductsController(ApplicationDbContext context, UserManager<IpmsUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Products
         public async Task<IActionResult> Index(SearchViewModel searchViewModel,bool orderbyPrice=false, bool orderbyCountry = false, bool orderbySupplier = false, bool orderbyName = false, bool orderbyCustomOffice=false)
         {
-            
-            var query = _context.Products.Include(p => p.Country).Include(p => p.Supplier).AsQueryable();
+            var IpmsUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            var query = _context.Products.Include(p => p.Country).Include(p => p.Supplier).Where(p=> p.IpmsUserId==IpmsUser.Id).AsQueryable();
             if (orderbyPrice==true)
             {
                 query= query.OrderByDescending(p => p.GoodsValue);
@@ -69,8 +75,9 @@ namespace ImportedProductTrackingSystem.Controllers
         }
         public async Task<IActionResult> Index2(SearchViewModel searchViewModel, bool orderbyPrice = false, bool orderbyCountry = false, bool orderbySupplier = false, bool orderbyName = false, bool orderbyCustomOffice = false)
         {
+            var ipmsUser = await _userManager.GetUserAsync(HttpContext.User);
 
-            var query = _context.Products.Include(p => p.Country).Include(p => p.Supplier).AsQueryable();
+            var query = _context.Products.Include(p => p.Country).Include(p => p.Supplier).Where(p => p.IpmsUserId == ipmsUser.Id).AsQueryable();
             if (orderbyPrice == true)
             {
                 query = query.OrderByDescending(p => p.GoodsValue);
@@ -120,8 +127,8 @@ namespace ImportedProductTrackingSystem.Controllers
         }
         public async Task<IActionResult> Index3(SearchViewModel searchViewModel, bool orderbyPrice = false, bool orderbyCountry = false, bool orderbySupplier = false, bool orderbyName = false, bool orderbyCustomOffice = false)
         {
-
-            var query = _context.Products.Include(p => p.Country).Include(p => p.Supplier).AsQueryable();
+            var IpmsUser = await _userManager.GetUserAsync(HttpContext.User);
+            var query = _context.Products.Include(p => p.Country).Include(p => p.Supplier).Where(p => p.IpmsUserId == IpmsUser.Id).AsQueryable();
             if (orderbyPrice == true)
             {
                 query = query.OrderByDescending(p => p.GoodsValue);
@@ -203,8 +210,12 @@ namespace ImportedProductTrackingSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,SupplierId,CountryId,CustomOffice,InvoiceDate,GoodsValue,CustomsDutyRate,VATRate")] Product product)
+        [Authorize]
+        public async Task<IActionResult> Create([Bind("Id,Name,SupplierId,CountryId,CustomOffice,InvoiceDate,GoodsValue,CustomsDutyRate,VATRate, IpmsUserId")] Product product)
         {
+            var IpmsUser = await _userManager.GetUserAsync(HttpContext.User);
+            product.IpmsUserId = IpmsUser.Id;
+
             if (ModelState.IsValid)
             {
                 _context.Add(product);
@@ -225,6 +236,11 @@ namespace ImportedProductTrackingSystem.Controllers
             }
 
             var product = await _context.Products.FindAsync(id);
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            if (product.IpmsUserId == currentUser.Id)
+            {
+                return Unauthorized();
+            }
             if (product == null)
             {
                 return NotFound();
@@ -239,7 +255,7 @@ namespace ImportedProductTrackingSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,SupplierId,CountryId,CustomOffice,InvoiceDate,GoodsValue,CustomsDutyRate,VATRate")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,SupplierId,CountryId,CustomOffice,InvoiceDate,GoodsValue,CustomsDutyRate,VATRate,IpmsUserId")] Product product)
         {
             if (id != product.Id)
             {
@@ -250,7 +266,23 @@ namespace ImportedProductTrackingSystem.Controllers
             {
                 try
                 {
-                    _context.Update(product);
+                    var oldProduct = await _context.Products.FindAsync(id);
+                    var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                    if (oldProduct.IpmsUserId== currentUser.Id)
+                    {
+                        return Unauthorized();
+                    }
+
+                    oldProduct.InvoiceDate = product.InvoiceDate;
+                    oldProduct.Country = product.Country;
+                    oldProduct.CustomOffice = product.CustomOffice;
+                    oldProduct.GoodsValue = product.GoodsValue;
+                    oldProduct.Name = product.Name;
+                    oldProduct.Supplier = product.Supplier;
+                    oldProduct.CustomsDutyRate = product.CustomsDutyRate;
+                    oldProduct.VATRate = product.VATRate;
+
+                    _context.Update(oldProduct);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

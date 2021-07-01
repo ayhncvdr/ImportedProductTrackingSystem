@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using ImportedProductTrackingSystem.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace ImportedProductTrackingSystem.Controllers
@@ -15,17 +16,29 @@ namespace ImportedProductTrackingSystem.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _dbContext;
+        private readonly UserManager<IpmsUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext dbContext)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext dbContext, UserManager<IpmsUser> userManager)
         {
             _logger = logger;
             _dbContext = dbContext;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            var query=  _dbContext.Products.Include(p => p.Country).Include(p => p.Supplier).OrderByDescending(p => p.InvoiceDate).Take(5);
-            List<Product> result =await query.ToListAsync();
+            List<Product> result;
+            if (User.Identity.IsAuthenticated)
+            {
+             var ipmsUser = await _userManager.GetUserAsync(HttpContext.User);
+                        var query=  _dbContext.Products.Include(p => p.Country).Include(p => p.Supplier).Where(p=>p.IpmsUserId == ipmsUser.Id).OrderByDescending(p => p.InvoiceDate).Take(5);
+                        result=await query.ToListAsync();
+            }
+            else
+            {
+                result = new List<Product>();
+            }
+           
             return View(result);
 
         }

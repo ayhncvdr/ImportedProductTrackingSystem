@@ -9,9 +9,9 @@
     <br /><br /><br />
 </div>
 
-
-
-<table class="table">
+@if (User.Identity.IsAuthenticated)
+{
+    <table class="table">
         <thead>
             <tr>
                 <th>
@@ -25,7 +25,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Country)
                 </th>
-                
+
                 <th>
                     Invoice @Html.DisplayNameFor(model => model.InvoiceDate.Date)
                 </th>
@@ -54,7 +54,7 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Country.Name)
                     </td>
-                    
+
                     <td>
                         @Html.DisplayFor(modelItem => item.InvoiceDate.Day) / @Html.DisplayFor(modelItem => item.InvoiceDate.Month)/ @Html.DisplayFor(modelItem => item.InvoiceDate.Year)
                     </td>
@@ -68,3 +68,7 @@
             }
         </tbody>
     </table>
+}
+
+
+

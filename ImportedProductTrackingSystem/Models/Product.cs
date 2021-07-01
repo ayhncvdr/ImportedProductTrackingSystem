@@ -95,6 +95,8 @@ namespace ImportedProductTrackingSystem.Models
 
         }
 
+        public string IpmsUserId { get; set; }
+        public virtual IpmsUser IpmsUser { get; set; }
         
 
        

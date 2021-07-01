@@ -7,7 +7,7 @@ using ImportedProductTrackingSystem.Models;
 
 namespace ImportedProductTrackingSystem.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<IpmsUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

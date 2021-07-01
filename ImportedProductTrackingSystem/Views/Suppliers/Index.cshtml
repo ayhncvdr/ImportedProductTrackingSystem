@@ -33,6 +33,10 @@
         </tr>
     </thead>
     <tbody>
-         @await Component.InvokeAsync("SupplierMenu")
+        @if (User.Identity.IsAuthenticated)
+        {
+            @await Component.InvokeAsync("SupplierMenu")
+        }
+
     </tbody>
 </table>

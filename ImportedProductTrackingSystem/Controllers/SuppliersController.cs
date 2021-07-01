@@ -7,28 +7,35 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ImportedProductTrackingSystem.Data;
 using ImportedProductTrackingSystem.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace ImportedProductTrackingSystem.Controllers
 {
+    [Authorize]
     public class SuppliersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IpmsUser> _userManager;
 
-        public SuppliersController(ApplicationDbContext context)
+        public SuppliersController(ApplicationDbContext context, UserManager<IpmsUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Suppliers
         public async Task<IActionResult> Index(SearchViewModel searchViewModel)
         {
+            var IpmsUser = await _userManager.GetUserAsync(HttpContext.User);
 
-            var query = _context.Suppliers.FromSqlRaw("select * from Suppliers").AsQueryable();
+            var query = _context.Suppliers.Where(s => s.IpmsUserId == IpmsUser.Id);
             if (!String.IsNullOrWhiteSpace(searchViewModel.SearchSupplier))
             {
-                query = query.Where(s => s.Name.Contains(searchViewModel.SearchSupplier));
+                query = query.Where(s => s.Name.Contains(searchViewModel.SearchSupplier)).Where(s=>s.IpmsUserId== IpmsUser.Id).AsQueryable();
             }
 
+            
             searchViewModel.SResult = await query.ToListAsync();
             return View(searchViewModel);
         }
@@ -52,6 +59,7 @@ namespace ImportedProductTrackingSystem.Controllers
         }
 
         // GET: Suppliers/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -60,12 +68,17 @@ namespace ImportedProductTrackingSystem.Controllers
         // POST: Suppliers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description")] Supplier supplier)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,IpmsUser")] Supplier supplier)
         {
+            var ipmsUser = await _userManager.GetUserAsync(HttpContext.User);
+            supplier.IpmsUserId = ipmsUser.Id;
+
             if (ModelState.IsValid)
             {
+                
                 _context.Add(supplier);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -82,6 +95,11 @@ namespace ImportedProductTrackingSystem.Controllers
             }
 
             var supplier = await _context.Suppliers.FindAsync(id);
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            if (supplier.IpmsUserId == currentUser.Id)
+            {
+                return Unauthorized();
+            }
             if (supplier == null)
             {
                 return NotFound();
@@ -94,7 +112,7 @@ namespace ImportedProductTrackingSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] Supplier supplier)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,IpmsUser")] Supplier supplier)
         {
             if (id != supplier.Id)
             {
@@ -105,7 +123,16 @@ namespace ImportedProductTrackingSystem.Controllers
             {
                 try
                 {
-                    _context.Update(supplier);
+                    var oldSupplier = await _context.Suppliers.FindAsync(id);
+                    var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                    if (oldSupplier.IpmsUserId == currentUser.Id)
+                    {
+                        return Unauthorized();
+                    }
+
+                    oldSupplier.Description = supplier.Description;
+                    oldSupplier.Name = supplier.Name;
+                    _context.Update(oldSupplier);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

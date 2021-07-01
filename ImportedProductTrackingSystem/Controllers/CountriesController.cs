@@ -7,25 +7,32 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ImportedProductTrackingSystem.Data;
 using ImportedProductTrackingSystem.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace ImportedProductTrackingSystem.Controllers
 {
+    [Authorize]
     public class CountriesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IpmsUser> _userManager;
 
-        public CountriesController(ApplicationDbContext context)
+        public CountriesController(ApplicationDbContext context, UserManager<IpmsUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Countries
         public async Task<IActionResult> Index(SearchViewModel searchViewModel)
         {
-            var query = _context.Countries.FromSqlRaw("select * from Countries").AsQueryable();
+            var IpmsUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            var query = _context.Countries.Where(c=>c.IpmsUserId==IpmsUser.Id).AsQueryable();
             if (!String.IsNullOrWhiteSpace(searchViewModel.SearchCountry))
             {
-                query = query.Where(c => c.Name.Contains(searchViewModel.SearchCountry));
+                query = query.Where(c => c.Name.Contains(searchViewModel.SearchCountry)).Where(c=>c.IpmsUserId==IpmsUser.Id);
             }
 
             searchViewModel.CResult = await query.ToListAsync();
@@ -61,8 +68,11 @@ namespace ImportedProductTrackingSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description")] Country country)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,IpmsUser")] Country country)
         {
+            var ipmsUser = await _userManager.GetUserAsync(HttpContext.User);
+            country.IpmsUserId = ipmsUser.Id;
+
             if (ModelState.IsValid)
             {
                 _context.Add(country);
@@ -81,6 +91,11 @@ namespace ImportedProductTrackingSystem.Controllers
             }
 
             var country = await _context.Countries.FindAsync(id);
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            if (country.IpmsUserId == currentUser.Id)
+            {
+                return Unauthorized();
+            }
             if (country == null)
             {
                 return NotFound();
@@ -104,6 +119,15 @@ namespace ImportedProductTrackingSystem.Controllers
             {
                 try
                 {
+                    var oldCountry = await _context.Countries.FindAsync(id);
+                    var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                    if (oldCountry.IpmsUserId == currentUser.Id)
+                    {
+                        return Unauthorized();
+                    }
+
+                    oldCountry.Description = oldCountry.Description;
+                    oldCountry.Name = oldCountry.Name;
                     _context.Update(country);
                     await _context.SaveChangesAsync();
                 }

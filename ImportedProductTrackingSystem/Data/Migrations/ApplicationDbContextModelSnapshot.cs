@@ -29,6 +29,9 @@ namespace ImportedProductTrackingSystem.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("IpmsUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -36,7 +39,80 @@ namespace ImportedProductTrackingSystem.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IpmsUserId");
+
                     b.ToTable("Countries");
+                });
+
+            modelBuilder.Entity("ImportedProductTrackingSystem.Models.IpmsUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("ImportedProductTrackingSystem.Models.Product", b =>
@@ -63,6 +139,9 @@ namespace ImportedProductTrackingSystem.Data.Migrations
                     b.Property<DateTime>("InvoiceDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("IpmsUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -77,6 +156,8 @@ namespace ImportedProductTrackingSystem.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CountryId");
+
+                    b.HasIndex("IpmsUserId");
 
                     b.HasIndex("SupplierId");
 
@@ -93,12 +174,17 @@ namespace ImportedProductTrackingSystem.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("IpmsUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IpmsUserId");
 
                     b.ToTable("Suppliers");
                 });
@@ -152,71 +238,6 @@ namespace ImportedProductTrackingSystem.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -303,6 +324,15 @@ namespace ImportedProductTrackingSystem.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("ImportedProductTrackingSystem.Models.Country", b =>
+                {
+                    b.HasOne("ImportedProductTrackingSystem.Models.IpmsUser", "IpmsUser")
+                        .WithMany("Countries")
+                        .HasForeignKey("IpmsUserId");
+
+                    b.Navigation("IpmsUser");
+                });
+
             modelBuilder.Entity("ImportedProductTrackingSystem.Models.Product", b =>
                 {
                     b.HasOne("ImportedProductTrackingSystem.Models.Country", "Country")
@@ -310,6 +340,10 @@ namespace ImportedProductTrackingSystem.Data.Migrations
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ImportedProductTrackingSystem.Models.IpmsUser", "IpmsUser")
+                        .WithMany("Products")
+                        .HasForeignKey("IpmsUserId");
 
                     b.HasOne("ImportedProductTrackingSystem.Models.Supplier", "Supplier")
                         .WithMany("Products")
@@ -319,7 +353,18 @@ namespace ImportedProductTrackingSystem.Data.Migrations
 
                     b.Navigation("Country");
 
+                    b.Navigation("IpmsUser");
+
                     b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("ImportedProductTrackingSystem.Models.Supplier", b =>
+                {
+                    b.HasOne("ImportedProductTrackingSystem.Models.IpmsUser", "IpmsUser")
+                        .WithMany("Suppliers")
+                        .HasForeignKey("IpmsUserId");
+
+                    b.Navigation("IpmsUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -333,7 +378,7 @@ namespace ImportedProductTrackingSystem.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("ImportedProductTrackingSystem.Models.IpmsUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -342,7 +387,7 @@ namespace ImportedProductTrackingSystem.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("ImportedProductTrackingSystem.Models.IpmsUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -357,7 +402,7 @@ namespace ImportedProductTrackingSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("ImportedProductTrackingSystem.Models.IpmsUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -366,7 +411,7 @@ namespace ImportedProductTrackingSystem.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("ImportedProductTrackingSystem.Models.IpmsUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -376,6 +421,15 @@ namespace ImportedProductTrackingSystem.Data.Migrations
             modelBuilder.Entity("ImportedProductTrackingSystem.Models.Country", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("ImportedProductTrackingSystem.Models.IpmsUser", b =>
+                {
+                    b.Navigation("Countries");
+
+                    b.Navigation("Products");
+
+                    b.Navigation("Suppliers");
                 });
 
             modelBuilder.Entity("ImportedProductTrackingSystem.Models.Supplier", b =>

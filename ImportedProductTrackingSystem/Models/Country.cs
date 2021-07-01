@@ -17,6 +17,8 @@ namespace ImportedProductTrackingSystem.Models
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
         public virtual List<Product> Products { get; set; }
+        public string IpmsUserId { get; set; }
+        public virtual IpmsUser IpmsUser { get; set; }
 
     }
 }
