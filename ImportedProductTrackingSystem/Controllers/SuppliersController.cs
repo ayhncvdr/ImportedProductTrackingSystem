@@ -20,9 +20,17 @@ namespace ImportedProductTrackingSystem.Controllers
         }
 
         // GET: Suppliers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(SearchViewModel searchViewModel)
         {
-            return View(await _context.Suppliers.ToListAsync());
+
+            var query = _context.Suppliers.FromSqlRaw("select * from Suppliers").AsQueryable();
+            if (!String.IsNullOrWhiteSpace(searchViewModel.SearchSupplier))
+            {
+                query = query.Where(s => s.Name.Contains(searchViewModel.SearchSupplier));
+            }
+
+            searchViewModel.SResult = await query.ToListAsync();
+            return View(searchViewModel);
         }
 
         // GET: Suppliers/Details/5

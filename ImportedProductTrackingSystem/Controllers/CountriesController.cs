@@ -20,9 +20,16 @@ namespace ImportedProductTrackingSystem.Controllers
         }
 
         // GET: Countries
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(SearchViewModel searchViewModel)
         {
-            return View(await _context.Countries.ToListAsync());
+            var query = _context.Countries.FromSqlRaw("select * from Countries").AsQueryable();
+            if (!String.IsNullOrWhiteSpace(searchViewModel.SearchCountry))
+            {
+                query = query.Where(c => c.Name.Contains(searchViewModel.SearchCountry));
+            }
+
+            searchViewModel.CResult = await query.ToListAsync();
+            return View(searchViewModel);
         }
 
         // GET: Countries/Details/5
