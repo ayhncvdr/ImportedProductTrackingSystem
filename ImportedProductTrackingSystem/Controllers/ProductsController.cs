@@ -20,51 +20,52 @@ namespace ImportedProductTrackingSystem.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index(bool orderbyPrice=false,bool orderbyCountry=false,bool orderbySupplier=false,bool orderbyName=false,bool orderbyCustomOffice=false)
+        public async Task<IActionResult> Index(SearchViewModel searchViewModel,bool orderbyPrice=false, bool orderbyCountry = false, bool orderbySupplier = false, bool orderbyName = false, bool orderbyCustomOffice=false)
         {
-            ViewBag.Price = orderbyPrice;
-            ViewBag.Country = orderbyCountry;
-            ViewBag.Supplier = orderbySupplier;
-            ViewBag.Name = orderbyName;
-            ViewBag.CustomOffice = orderbyCustomOffice;
-            var applicationDbContext = _context.Products.Include(p => p.Country).Include(p => p.Supplier).AsQueryable();
+            
+            var query = _context.Products.Include(p => p.Country).Include(p => p.Supplier).AsQueryable();
             if (orderbyPrice==true)
             {
-                applicationDbContext= applicationDbContext.OrderByDescending(p => p.GoodsValue);
+                query= query.OrderByDescending(p => p.GoodsValue);
                 
             }
             else if (orderbyCountry == true)
             {
-                applicationDbContext = applicationDbContext.OrderBy(p => p.Country);
+                query = query.OrderBy(p => p.Country);
 
             }
             else if (orderbySupplier == true)
             {
-                applicationDbContext = applicationDbContext.OrderBy(p => p.Supplier);
+                query = query.OrderBy(p => p.Supplier);
 
             }
             else if (orderbyName == true)
             {
-                applicationDbContext = applicationDbContext.OrderBy(p => p.Name);
+                query = query.OrderBy(p => p.Name);
 
             }
             else if (orderbyCustomOffice == true)
             {
-                applicationDbContext = applicationDbContext.OrderBy(p => p.CustomOffice);
+                query = query.OrderByDescending(p => p.CustomOffice);
 
+            }
+
+            else if (!String.IsNullOrWhiteSpace(searchViewModel.SearchProduct))
+            {
+                query = query.Where(p => p.Name.Contains(searchViewModel.SearchProduct));
             }
 
             else
             {
-                applicationDbContext = applicationDbContext.OrderByDescending(p => p.InvoiceDate);
+                query = query.OrderByDescending(p => p.InvoiceDate);
             }
             
             
                
            // applicationDbContext = applicationDbContext.OrderByDescending(p => p.ValueAddedTaxPaidToCustoms);
-            
 
-            return View(await applicationDbContext.ToListAsync());
+           searchViewModel.Result = await query.ToListAsync();
+            return View(searchViewModel);
         }
 
         // GET: Products/Details/5

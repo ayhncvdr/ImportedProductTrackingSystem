@@ -35,11 +35,11 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.CustomOffice)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.InvoiceDate)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.InvoiceDate)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.InvoiceDate.Day)/@Html.DisplayFor(model => model.InvoiceDate.Month)/@Html.DisplayFor(model => model.InvoiceDate.Year)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.GoodsValue)
