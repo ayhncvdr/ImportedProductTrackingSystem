@@ -19,10 +19,10 @@ namespace ImportedProductTrackingSystem.ViewComponents
             this.dbContext = dbContext;
             _userManager = userManager;
         }
-        public async Task<IViewComponentResult> InvokeAsync(bool ShowEmpty=true)
+        public async Task<IViewComponentResult> InvokeAsync()
         {
             var ipmsUser = await _userManager.GetUserAsync(HttpContext.User);
-            var query = dbContext.Suppliers.Where(s => s.IpmsUserId == ipmsUser.Id);
+            var query = dbContext.Suppliers.FromSqlRaw("select * from Suppliers").Where(s => s.IpmsUserId == ipmsUser.Id);
 
             var items = await query.ToListAsync();
             return View(items);

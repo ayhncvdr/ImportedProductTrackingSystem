@@ -27,15 +27,15 @@ namespace ImportedProductTrackingSystem.Controllers
         // GET: Suppliers
         public async Task<IActionResult> Index(SearchViewModel searchViewModel)
         {
-            var IpmsUser = await _userManager.GetUserAsync(HttpContext.User);
+            var ipmsUser = await _userManager.GetUserAsync(HttpContext.User);
 
-            var query = _context.Suppliers.Where(s => s.IpmsUserId == IpmsUser.Id);
+            var query = _context.Suppliers.Where(s => s.IpmsUserId == ipmsUser.Id).AsQueryable();
             if (!String.IsNullOrWhiteSpace(searchViewModel.SearchSupplier))
             {
-                query = query.Where(s => s.Name.Contains(searchViewModel.SearchSupplier)).Where(s=>s.IpmsUserId== IpmsUser.Id).AsQueryable();
+                query = query.Where(s => s.Name.Contains(searchViewModel.SearchSupplier));
             }
 
-            
+
             searchViewModel.SResult = await query.ToListAsync();
             return View(searchViewModel);
         }

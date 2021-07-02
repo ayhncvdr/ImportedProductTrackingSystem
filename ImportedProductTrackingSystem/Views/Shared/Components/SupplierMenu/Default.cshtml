@@ -8,10 +8,10 @@
     <tr>
         <td>
             @*@Html.DisplayFor(modelItem => item.Name)*@
-            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index2" asp-route-supplierId="@item.Id" asp-route-ipmsUserId="@item.IpmsUserId" asp-route-ipmsUser="@item.IpmsUser">@item.Name</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index2" asp-route-supplierId="@item.Id" asp-route-IpmsUserId="@item.IpmsUserId" asp-route-IpmsUser="@item.IpmsUser">@item.Name</a>
         </td>
         <td>
-            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index2" asp-route-supplierId="@item.Id" asp-route-ipmsUserId="@item.IpmsUserId" asp-route-ipmsUser="@item.IpmsUser">@item.Description</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index2" asp-route-supplierId="@item.Id" asp-route-IpmsUserId="@item.IpmsUserId" asp-route-IpmsUser="@item.IpmsUser">@item.Description</a>
         </td>
         <td>
             <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

@@ -27,12 +27,12 @@ namespace ImportedProductTrackingSystem.Controllers
         // GET: Countries
         public async Task<IActionResult> Index(SearchViewModel searchViewModel)
         {
-            var IpmsUser = await _userManager.GetUserAsync(HttpContext.User);
+            var ipmsUser = await _userManager.GetUserAsync(HttpContext.User);
 
-            var query = _context.Countries.Where(c=>c.IpmsUserId==IpmsUser.Id).AsQueryable();
+            var query = _context.Countries.Where(c=>c.IpmsUserId==ipmsUser.Id).AsQueryable();
             if (!String.IsNullOrWhiteSpace(searchViewModel.SearchCountry))
             {
-                query = query.Where(c => c.Name.Contains(searchViewModel.SearchCountry)).Where(c=>c.IpmsUserId==IpmsUser.Id);
+                query = query.Where(c => c.Name.Contains(searchViewModel.SearchCountry));
             }
 
             searchViewModel.CResult = await query.ToListAsync();

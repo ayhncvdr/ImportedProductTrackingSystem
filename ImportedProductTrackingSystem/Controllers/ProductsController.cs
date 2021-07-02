@@ -213,7 +213,6 @@ namespace ImportedProductTrackingSystem.Controllers
         [Authorize]
         public async Task<IActionResult> Create([Bind("Id,Name,SupplierId,CountryId,CustomOffice,InvoiceDate,GoodsValue,CustomsDutyRate,VATRate, IpmsUserId")] Product product)
         {
-            product = await _context.Products.FindAsync();
             var IpmsUser = await _userManager.GetUserAsync(HttpContext.User);
             product.IpmsUserId = IpmsUser.Id;
 
