@@ -96,7 +96,7 @@ namespace ImportedProductTrackingSystem.Controllers
 
             var supplier = await _context.Suppliers.FindAsync(id);
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-            if (supplier.IpmsUserId == currentUser.Id)
+            if (supplier.IpmsUserId != currentUser.Id)
             {
                 return Unauthorized();
             }
@@ -112,7 +112,7 @@ namespace ImportedProductTrackingSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,IpmsUser")] Supplier supplier)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,")] Supplier supplier)
         {
             if (id != supplier.Id)
             {
@@ -125,7 +125,7 @@ namespace ImportedProductTrackingSystem.Controllers
                 {
                     var oldSupplier = await _context.Suppliers.FindAsync(id);
                     var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-                    if (oldSupplier.IpmsUserId == currentUser.Id)
+                    if (oldSupplier.IpmsUserId != currentUser.Id)
                     {
                         return Unauthorized();
                     }

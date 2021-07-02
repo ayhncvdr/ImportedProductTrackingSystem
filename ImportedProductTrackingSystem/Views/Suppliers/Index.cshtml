@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>List of Suppliers</h1>
 
 <p>
     <a asp-action="Create">Add a Supplier</a>
@@ -12,7 +12,7 @@
 
 <form asp-action="Index" asp-controller="Suppliers" method="get" style="width: 500px ">
     <div class="form-group">
-        <label asp-for="SearchSupplier" class="control-label"> Search Supplier</label>
+        <label asp-for="SearchSupplier" class="control-label"> Search a Supplier</label>
         <input asp-for="SearchSupplier" class="form-control" />
     </div>
     <div class="form-group">
@@ -20,7 +20,7 @@
     </div>
 </form>
 
-<table class="table">
+<table class="table" style="background-color: #87ccc9">
     <thead>
         <tr>
             <th>

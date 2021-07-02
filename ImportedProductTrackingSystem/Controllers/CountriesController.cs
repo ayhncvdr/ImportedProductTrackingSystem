@@ -92,7 +92,7 @@ namespace ImportedProductTrackingSystem.Controllers
 
             var country = await _context.Countries.FindAsync(id);
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-            if (country.IpmsUserId == currentUser.Id)
+            if (country.IpmsUserId != currentUser.Id)
             {
                 return Unauthorized();
             }
@@ -121,14 +121,14 @@ namespace ImportedProductTrackingSystem.Controllers
                 {
                     var oldCountry = await _context.Countries.FindAsync(id);
                     var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-                    if (oldCountry.IpmsUserId == currentUser.Id)
+                    if (oldCountry.IpmsUserId != currentUser.Id)
                     {
                         return Unauthorized();
                     }
 
                     oldCountry.Description = oldCountry.Description;
                     oldCountry.Name = oldCountry.Name;
-                    _context.Update(country);
+                    _context.Update(oldCountry);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

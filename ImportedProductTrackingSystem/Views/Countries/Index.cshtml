@@ -4,21 +4,21 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>List of Import Partner Countries</h1>
 
 <p>
     <a asp-action="Create">Add a Country</a>
 </p>
 <form asp-action="Index" asp-controller="Countries" method="get" style="width: 500px ">
     <div class="form-group">
-        <label asp-for="SearchCountry" class="control-label"> Search Country</label>
-        <input asp-for="SearchCountry" class="form-control" />
+        <label asp-for="SearchCountry" class="control-label"> Search a Country</label>
+        <input asp-for="SearchCountry" class="form-control" placeholder="search a country"/>
     </div>
     <div class="form-group">
         <input type="submit" value="Search" class="btn btn-primary" />
     </div>
 </form>
-<table class="table">
+<table class="table" style="background-color: #87ccc9">
     <thead>
         <tr>
             <th>

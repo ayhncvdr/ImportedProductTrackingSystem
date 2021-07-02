@@ -5,13 +5,13 @@
 
 <div class="text-center">
     <p></p>
-    <p style="font-size: 38px"> Welcome To Imported Product Tracking System</p>
+    <p style="font-size: 38px; color: coral" > <b>Imported Product Management System</b></p>
     <br /><br /><br />
 </div>
 
 @if (User.Identity.IsAuthenticated)
 {
-    <table class="table">
+    <table class="table" style="background-color: #87ccc9">
         <thead>
             <tr>
                 <th>
@@ -69,6 +69,25 @@
         </tbody>
     </table>
 }
+else{
 
+    <div style="width: max-content">
+       
+        <div class="container" style="position: relative; text-align: center; width: -moz-max-content  ">
+            <img src="lib/bootstrap/dist/images/banner-dec-right.png" style="z-index: 100; width:100%"/>
+            <div class="row">
+                <div class="col-lg-6 align-text-top" style="position: absolute; top: 220px; left: 16px; font-size: 40px; color: coral; text-align: left; z-index: 150">
+                    <b>Track Your Imported Products With IPMS</b> <br/><br/>
+                    <div style="font-size: 20px; color: black"> IPMS is a system where you can track your imported products, country of origin of the products and the suppliers. IPMS stores the imported products and help you to trace them. Thus, IPMS helps you to manage your business!</div>
+                    <br/>
+                    <div> <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Register"><button style="background-color: #03a4ed; border: none; color: white; padding: 20px; text-align: center; display: inline-block; font-size: 16px; margin: 4px 2px; border-radius: 40px;"> Register to IPMS!</button></a></div>
+                </div>
+                <div class="col-lg-6 align-text-top" style="position: absolute; top: 150px; left: 530px; font-size: 80px; color: coral"> <img src="lib/bootstrap/dist/images/banner-right-image.png"/></div>
+            </div>
+            
+        </div>
+
+    </div>
+}
 
 

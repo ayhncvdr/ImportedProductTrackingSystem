@@ -4,15 +4,15 @@
     ViewData["Title"] = "Index";
 }
 <body style="margin-right: 250px;">
-    <h1>Index</h1>
+    <h1>List of Imported Products</h1>
 
     <p>
         <a asp-action="Create">Add a New Product</a>
     </p>
     <form asp-action="Index" asp-controller="Products" method="get" style="width: 500px ">
         <div class="form-group">
-            <label asp-for="SearchProduct" class="control-label"> Search Product</label>
-            <input asp-for="SearchProduct" class="form-control" />
+            <label asp-for="SearchProduct" class="control-label"> Search a Product</label>
+            <input asp-for="SearchProduct" class="form-control" placeholder="search a product"/>
         </div>
         <div class="form-group">
             <input type="submit" value="Search" class="btn btn-primary" />
@@ -45,7 +45,10 @@
     </ul>
 
 
-    <table class="table" style="width: 1400px; margin-right: 1000px">
+    <table class="table" style="        width: 1400px;
+        margin-right: 1000px;
+        background-color: #87ccc9
+" >
         <thead>
             <tr>
                 <th>

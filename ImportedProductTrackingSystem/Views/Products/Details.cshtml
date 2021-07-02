@@ -4,7 +4,7 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Details of the Product</h1>
 
 <div>
     <h4>Product</h4>
@@ -35,10 +35,10 @@
             @Html.DisplayFor(model => model.CustomOffice)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.InvoiceDate)
+            @Html.DisplayNameFor(model => model.InvoiceDate.Date)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.InvoiceDate)
+            @Html.DisplayFor(model => model.InvoiceDate.Date)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.GoodsValue)
