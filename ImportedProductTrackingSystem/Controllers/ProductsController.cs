@@ -255,7 +255,7 @@ namespace ImportedProductTrackingSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,SupplierId,CountryId,CustomOffice,InvoiceDate,GoodsValue,CustomsDutyRate,VATRate,IpmsUserId")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,SupplierId,CountryId,CustomOffice,InvoiceDate,GoodsValue,CustomsDutyRate,VATRate")] Product product)
         {
             if (id != product.Id)
             {
@@ -281,6 +281,8 @@ namespace ImportedProductTrackingSystem.Controllers
                     oldProduct.Supplier = product.Supplier;
                     oldProduct.CustomsDutyRate = product.CustomsDutyRate;
                     oldProduct.VATRate = product.VATRate;
+                    oldProduct.CountryId = product.CountryId;
+                    oldProduct.SupplierId = product.SupplierId;
 
                     _context.Update(oldProduct);
                     await _context.SaveChangesAsync();
